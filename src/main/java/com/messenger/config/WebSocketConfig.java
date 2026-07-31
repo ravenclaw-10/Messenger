@@ -6,19 +6,22 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
-@Configuration
-@EnableWebSocketMessageBroker
+@Configuration   // Defining this as a configuration class
+@EnableWebSocketMessageBroker   // Tell spring that this class is enabling web socket for real time communication
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/chat")
-                .setAllowedOrigins("http://localhost:5173")
-                .withSockJS();
+                .setAllowedOrigins("http://localhost:8080") //Security to prevent unauthorized sources
+                .withSockJS(); // Adds compatibility for clients that don't support web sockets
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
+        // Set message broker
         registry.enableSimpleBroker("/topic");
+        // Tell server when it needs to expect a message
         registry.setApplicationDestinationPrefixes("/messenger");
     }
 }
